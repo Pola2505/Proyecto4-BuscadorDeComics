@@ -5,27 +5,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Stalinist+One&display=swap" rel="stylesheet">
     <title>Buscador de Comics</title>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        roboto: ['Roboto', 'sans-serif'],
+                        stalinist: ['Stalinist One', 'sans-serif'],
+                    }
+                }
+            }
+
+        }
+    </script>
 </head>
 
 <body>
     <header>
-        <div id="logo-container">
-            <h1 id="logo">ADA COMICS</h1>
+        <div id="logo-container" class="flex justify-center items-center bg-black h-12 w-full">
+            <h1 id="logo" class="bg-red-600 w-54 h-12 text-yellow-500 text-xl font-stalinist flex items-center px-2">ADA COMICS</h1>
         </div>
     </header>
 
-    <section id="hero">
+    <div id="hero" class="relative w-full h-[400px] bg-cover bg-[url('https://frontend-proyecto-comics.adaitw.org/hero.jpg')]">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+    </div>
 
-    </section>
+    <main class="mx-48">
 
-    <main>
-
-        <div>
+        <div class="w-full">
 
             <h2>Búsqueda</h2>
 
-            <div id="search-container">
+            <div id="search-container" class="flex justify-between">
 
                 <div id="search-input-container">
 
@@ -34,7 +51,7 @@
 
                 </div>
 
-                <div id="search-select-container">
+                <div id="search-select-container" class="flex">
 
                     <div id="select-options">
 
@@ -63,14 +80,14 @@
         <section id="section-results">
 
             <h3>Resultados</h3>
-            <p><span>0</span>RESULTADOS</p>
+            <p><span>0</span> RESULTADOS</p>
 
         </section>
     </main>
 
     <footer>
-        <div>
-            <p>Hecho con ❤️  por San</p>
+        <div class="bg-black absolute bottom-0 w-full h-24 flex justify-center items-center">
+            <p class="text-red-500 text-center">Hecho con ❤️  por San</p>
         </div>
     </footer>
 
