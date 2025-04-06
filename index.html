@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Stalinist+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Buscador de Comics</title>
     <script>
         tailwind.config = {
@@ -27,14 +28,14 @@
 
 <body>
     <header class="fixed top-0 left-0 w-full bg-black z-10 h-12 flex justify-center items-center">
-        <div id="logo-container" class="flex justify-center items-center bg-black h-12 w-full">
-            <h1 id="logo" class="w-54 h-12 text-red-600 text-xl font-stalinist flex items-center px-2">MARVEL COMICS</h1>
+        <div id="logo-container" class="flex justify-center items-center bg-white h-12 w-full">
+            <img class="h-12 w-1/4" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI5_eCMFv2JFx_GLpkK4ZcVKcXqdTnkKdgWA&s" alt="">
         </div>
     </header>
 
-    <div id="hero" class="relative w-full h-[560px] mt-12 overflow-hidden">
+    <div id="hero" class="relative w-full h-[600px] mt-12 overflow-hidden">
         <div id="parallax-img"
-             class="absolute inset-0 bg-[url('https://wallpapers.com/images/hd/marvel-all-in-one-3twzbzkk15m1le1f.webp')] bg-cover bg-center"
+             class="absolute inset-0 bg-[url('https://images7.alphacoders.com/133/thumb-1920-1335145.jpg')] bg-cover bg-center"
              style="transform: translateY(0); transition: transform 0.1s;">
         </div>
         <div class="absolute inset-0 bg-black opacity-40"></div>
@@ -44,28 +45,31 @@
 
         <div class="w-full">
 
-            <h2 class="text-2xl font-semibold py-6">Búsqueda</h2>
+            <h2 class="text-2xl font-semibold py-6 text-[#2C2C2C]">Búsqueda</h2>
 
             <div id="search-container" class="flex justify-between">
 
-                <div id="search-input-container">
-
-                    <input id="search-input" type="text" placeholder="Ingresa tu busqueda..." class="border rounded-lg focus:outline-none focus:border-red-500 focus:shadow-md focus:shadow-[#B82132] px-6 py-2 pr-48">
-                    <i></i>
-
-                </div>
+                <div class="flex items-center border rounded-lg px-3 py-2 w-full max-w-md focus-within:border-cyan-600 focus-within:shadow-md focus-within:shadow-cyan-800">
+                    <i class="bi bi-search-heart text-[20px] text-gray-500"></i>
+                    <input
+                      type="text"
+                      placeholder="Ingresa tu búsqueda..."
+                      class="flex-1 ml-2 bg-transparent focus:outline-none"
+                    />
+                  </div>
+                  
 
                 <div id="search-select-container" class="flex">
 
                     <div id="select-options">
 
-                        <label for="tipo">TIPO</label>
+                        <label for="tipo" class="text-[#2C2C2C]">TIPO</label>
                         <select name="tipo" id="tipo">
                             <option value="comics">COMICS</option>
                             <option value="personajes">PERSONAJES</option>
                         </select>
 
-                        <label for="orden">ORDEN</label>
+                        <label for="orden" class="text-[#2C2C2C]">ORDEN</label>
                         <select name="orden" id="orden">
                             <option value="a-z">A-Z</option>
                             <option value="z-a">Z-A</option>
@@ -75,7 +79,7 @@
 
                     </div>
 
-                    <button type="button">BUSCAR</button>
+                    <button type="button" class="bg-cyan-600 text-white px-2 rounded-lg mx-10">BUSCAR</button>
 
                 </div>
             </div>
@@ -90,8 +94,8 @@
     </main>
 
     <footer>
-        <div class="bg-black w-full h-24 flex justify-center items-center">
-            <p class="text-green-500 text-center">Hecho con ❤️  por San</p>
+        <div class="bg-cyan-600 w-full h-16 flex justify-center items-center">
+            <p class="text-white text-center">Hecho con ❤️ por San</p>
         </div>
     </footer>
 
