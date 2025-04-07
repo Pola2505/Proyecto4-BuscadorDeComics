@@ -8,8 +8,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Stalinist+One&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Stalinist+One&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Buscador de Comics</title>
     <script>
         tailwind.config = {
@@ -26,20 +29,22 @@
     </script>
 </head>
 
-<body>
+<body class="bg-cyan-50">
     <header class="fixed top-0 left-0 w-full bg-black z-10 h-12 flex justify-center items-center">
         <div id="logo-container" class="flex justify-center items-center bg-white h-12 w-full">
-            <img class="h-12 w-1/4" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI5_eCMFv2JFx_GLpkK4ZcVKcXqdTnkKdgWA&s" alt="">
+            <img class="h-12 w-1/4"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI5_eCMFv2JFx_GLpkK4ZcVKcXqdTnkKdgWA&s"
+                alt="">
         </div>
     </header>
 
     <div id="hero" class="relative w-full h-[600px] mt-12 overflow-hidden">
         <div id="parallax-img"
-             class="absolute inset-0 bg-[url('https://images7.alphacoders.com/133/thumb-1920-1335145.jpg')] bg-cover bg-center"
-             style="transform: translateY(0); transition: transform 0.1s;">
+            class="absolute inset-0 bg-[url('https://images7.alphacoders.com/133/thumb-1920-1335145.jpg')] bg-cover bg-center"
+            style="transform: translateY(0); transition: transform 0.1s;">
         </div>
         <div class="absolute inset-0 bg-black opacity-40"></div>
-      </div>
+    </div>
 
     <main class="mx-48">
 
@@ -49,33 +54,35 @@
 
             <div id="search-container" class="flex justify-between">
 
-                <div class="flex items-center border rounded-lg px-3 py-2 w-full max-w-md focus-within:border-cyan-600 focus-within:shadow-md focus-within:shadow-cyan-800">
-                    <i class="bi bi-search-heart text-[20px] text-gray-500"></i>
-                    <input
-                      type="text"
-                      placeholder="Ingresa tu búsqueda..."
-                      class="flex-1 ml-2 bg-transparent focus:outline-none"
-                    />
-                  </div>
-                  
+                <div
+                    class="group flex items-center border rounded-lg px-3 py-2 w-full max-w-md focus-within:border-cyan-600 focus-within:shadow-md focus-within:shadow-cyan-800 bg-white">
+                    <i class="bi bi-search-heart text-[20px] text-gray-500 group-focus-within:text-cyan-600"></i>
+                    <input type="text" placeholder="Ingresa tu búsqueda..."
+                        class="flex-1 ml-2 bg-transparent focus:outline-none" />
+                </div>
 
-                <div id="search-select-container" class="flex">
 
-                    <div id="select-options">
+                <div id="search-select-container" class="flex justify-center content-center">
 
-                        <label for="tipo" class="text-[#2C2C2C]">TIPO</label>
-                        <select name="tipo" id="tipo">
-                            <option value="comics">COMICS</option>
-                            <option value="personajes">PERSONAJES</option>
-                        </select>
+                    <div id="select-options" class="flex justify-between gap-4">
 
-                        <label for="orden" class="text-[#2C2C2C]">ORDEN</label>
-                        <select name="orden" id="orden">
-                            <option value="a-z">A-Z</option>
-                            <option value="z-a">Z-A</option>
-                            <option value="mas-viejos">Más viejos</option>
-                            <option value="mas-nuevos">Más nuevos</option>
-                        </select>
+                        <div>
+                            <label for="tipo" class="text-cyan-600 font-semibold tracking-wide">TIPO</label>
+                            <select name="tipo" id="tipo" class="mx-2 px-3 py-2 rounded-lg border">
+                                <option value="comics">PERSONAJE</option>
+                                <option value="personajes">EPISODIO</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="orden" class="text-cyan-600 font-semibold tracking-wide">ORDEN</label>
+                            <select name="orden" id="orden" class="mx-2 px-3 py-2 rounded-lg border">
+                                <option value="a-z">A-Z</option>
+                                <option value="z-a">Z-A</option>
+                                <option value="mas-viejos">Más viejos</option>
+                                <option value="mas-nuevos">Más nuevos</option>
+                            </select>
+                        </div>
 
                     </div>
 
@@ -89,7 +96,10 @@
 
             <h3 class="text-2xl font-semibold py-6">Resultados</h3>
             <p><span>0</span> RESULTADOS</p>
-    
+
+        </section>
+        <section id="container-characters" class="flex flex-row flex-wrap justify-between w-full gap-3 mt-10">
+
         </section>
     </main>
 
@@ -99,7 +109,7 @@
         </div>
     </footer>
 
-    <script src="main.js"></script>
+    <script type="module" src="main.js"></script>
 </body>
 
 </html>
