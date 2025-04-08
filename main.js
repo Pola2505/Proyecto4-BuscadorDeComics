@@ -75,9 +75,11 @@ const obtenerPersonajes = async (pagina = 1, nombre = '') => {
         const { data } = await axios(`https://rickandmortyapi.com/api/character/?page=${page}`);
         const personajes = data.results;
         totalPages = data.info.pages;
+        const results = data.info.count;
 
         pintarPersonajes(personajes);
         renderizarPaginacion(page, totalPages);
+        actualizarResultados(results);
     } catch (error) {
         console.log(error);
     }
@@ -173,6 +175,13 @@ const renderizarPaginacion = (paginaActual, totalPaginas) => {
     
     $pagination.appendChild(btnNext);
 };
+
+// Results 
+
+const actualizarResultados = (number) => {
+    $resultsNumber.innerHTML = '';
+    $resultsNumber.innerHTML += `${number}`;
+}
 
 
 
