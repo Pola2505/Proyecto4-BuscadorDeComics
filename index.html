@@ -68,7 +68,8 @@
 
                         <div>
                             <label for="tipo" class="text-cyan-600 font-semibold tracking-wide">TIPO</label>
-                            <select name="tipo" id="tipo" class="mx-2 px-3 py-2 rounded-lg border focus:ring-2 focus:ring-cyan-600 focus:border-cyan-600 focus:outline-none">
+                            <select name="tipo" id="tipo"
+                                class="mx-2 px-3 py-2 rounded-lg border focus:ring-2 focus:ring-cyan-600 focus:border-cyan-600 focus:outline-none">
                                 <option value="character">PERSONAJES</option>
                                 <option value="episode">EPISODIOS</option>
                             </select>
@@ -76,7 +77,8 @@
 
                         <div>
                             <label for="orden" class="text-cyan-600 font-semibold tracking-wide">ORDEN</label>
-                            <select name="orden" id="orden" class="mx-2 px-3 py-2 rounded-lg border focus:ring-2 focus:ring-cyan-600 focus:border-cyan-600 focus:outline-none">
+                            <select name="orden" id="orden"
+                                class="mx-2 px-3 py-2 rounded-lg border focus:ring-2 focus:ring-cyan-600 focus:border-cyan-600 focus:outline-none">
                                 <option value="a-z">A-Z</option>
                                 <option value="z-a">Z-A</option>
                                 <option value="mas-viejos">Más viejos</option>
@@ -95,10 +97,10 @@
         <section id="section-results">
 
             <h3 class="text-2xl font-semibold py-6">Resultados</h3>
-            <p><span>0</span> RESULTADOS</p>
+            <p><span id="results-number">0</span> RESULTADOS</p>
 
         </section>
-        
+
         <section id="container-characters" class="flex flex-row flex-wrap justify-between w-full gap-3 mt-10">
 
         </section>
@@ -109,14 +111,30 @@
 
         <div id="pagination" class="flex justify-center p-10">
             <ul id="pagination-list" class="flex bg-white text-cyan-600 p-2 border rounded-full">
-                <li id="btn-prev" class="btn list-none leading-[45px] text-[18px] text-center cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white px-3"><span><i class="bi bi-arrow-left"></i>Volver</span></li>
-                <li class="number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white hover:rounded-full mx-1"><span>1</span></li>
-                <li class="number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white hover:rounded-full mx-1"><span>2</span></li>
-                <li class="number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white hover:rounded-full mx-1"><span>3</span></li>
-                <li class="number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white hover:rounded-full mx-1"><span>4</span></li>
-                <li class="number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white hover:rounded-full mx-1"><span>5</span></li>
-                <li class="dots list-none leading-[45px] text-center h-[45px] w-[45px] text-[22px] font-semibold cursor-default"><span>...</span></li>
-                <li id="btn-next" class="btn list-none leading-[45px] text-[18px] text-center cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white px-3"><span>Siguiente<i class="bi bi-arrow-right"></i></span></li>
+                <!-- <li id="btn-prev"
+                    class="btn list-none leading-[45px] text-[18px] text-center cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white px-3">
+                    <span><i class="bi bi-arrow-left"></i>Volver</span></li>
+                <li
+                    class="number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white hover:rounded-full mx-1">
+                    <span>1</span></li>
+                <li
+                    class="number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white hover:rounded-full mx-1">
+                    <span>2</span></li>
+                <li
+                    class="number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white hover:rounded-full mx-1">
+                    <span>3</span></li>
+                <li
+                    class="number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white hover:rounded-full mx-1">
+                    <span>4</span></li>
+                <li
+                    class="number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white hover:rounded-full mx-1">
+                    <span>5</span></li>
+                <li
+                    class="dots list-none leading-[45px] text-center h-[45px] w-[45px] text-[22px] font-semibold cursor-default">
+                    <span>...</span></li>
+                <li id="btn-next"
+                    class="btn list-none leading-[45px] text-[18px] text-center cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white px-3">
+                    <span>Siguiente<i class="bi bi-arrow-right"></i></span></li> -->
             </ul>
         </div>
 

@@ -1,3 +1,8 @@
+// -------------------------------------------------------- VARIABLES --------------------------------------------------------
+
+let page = 1;
+let totalPages = 42;
+
 // -------------------------------------------------------- FUNCIONES GENERALES --------------------------------------------------------
 
 const $ = (elem) => document.querySelector(elem);
@@ -21,6 +26,7 @@ const $containerCharacters = $('#container-characters');
 const $pagination = $('#pagination-list');
 const $selectTipo = $('#tipo');
 const $containerEpisodes = $('#container-episodes');
+const $resultsNumber = $('#results-number');
 
 // -------------------------------------------------------- PINTAR PERSONAJES --------------------------------------------------------
 
@@ -63,15 +69,20 @@ const pintarEpisodios = (arrayEpisodes) => {
 
 // -------------------------------------------------------- OBTENER PERSONAJES --------------------------------------------------------
 
-const obtenerPersonajes = async () => {
+const obtenerPersonajes = async (pagina = 1, nombre = '') => {
     try {
-        const { data } = await axios('https://rickandmortyapi.com/api/character')
+        page = pagina; 
+        const { data } = await axios(`https://rickandmortyapi.com/api/character/?page=${page}`);
         const personajes = data.results;
+        totalPages = data.info.pages;
+
         pintarPersonajes(personajes);
+        renderizarPaginacion(page, totalPages);
     } catch (error) {
         console.log(error);
     }
-}
+};
+
 
 // -------------------------------------------------------- OBTENER EPISODIOS --------------------------------------------------------
 
@@ -100,6 +111,69 @@ $selectTipo.addEventListener('input', (elem) => {
 })
 
 
+// -------------------------------------------------------- PAGINACION CAMBIO DE PAGINA -------------------------------------------------------- 
+
+const renderizarPaginacion = (paginaActual, totalPaginas) => {
+    $pagination.innerHTML = ''; // Limpiamos el contenido anterior
+
+    // Botón "Volver"
+    const btnPrev = document.createElement('li');
+    btnPrev.className = 'btn list-none leading-[45px] text-[18px] text-center cursor-pointer font-semibold px-3';
+    btnPrev.innerHTML = `<span><i class="bi bi-arrow-left"></i>Volver</span>`;
+    if (page === 1) {
+        btnPrev.classList.add('disabled', 'cursor-default', 'text-gray-400');
+        btnPrev.classList.remove('cursor-pointer');
+    } else {
+        btnPrev.classList.add('hover:bg-cyan-600', 'hover:text-white', 'cursor-pointer', 'prev');
+        btnPrev.addEventListener('click', () => {
+            if (page > 1) {
+                page--;
+                obtenerPersonajes(page);
+            }
+        });
+    }
+    $pagination.appendChild(btnPrev);
+
+    // Botones de páginas (dinámico alrededor de la actual, máx 5)
+    const maxBotones = 5;
+    let inicio = Math.max(1, paginaActual - 2);
+    let fin = Math.min(totalPaginas, inicio + maxBotones - 1);
+
+    if (fin - inicio < maxBotones - 1) {
+        inicio = Math.max(1, fin - maxBotones + 1);
+    }
+
+    for (let i = inicio; i <= fin; i++) {
+        const btnPage = document.createElement('li');
+        btnPage.className = `number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white hover:rounded-full mx-1 ${paginaActual === i ? 'bg-cyan-600 text-white rounded-full' : ''}`;
+        btnPage.innerHTML = `<span>${i}</span>`;
+        btnPage.addEventListener('click', () => {
+            page = i;
+            obtenerPersonajes(i);
+        });
+        $pagination.appendChild(btnPage);
+    }
+
+    // Botón "Siguiente"
+    const btnNext = document.createElement('li');
+    btnNext.className = 'btn next list-none leading-[45px] text-[18px] text-center cursor-pointer font-semibold hover:bg-cyan-600 hover:text-white px-3';
+    btnNext.innerHTML = `<span>Siguiente<i class="bi bi-arrow-right"></i></span>`;
+    if( paginaActual === totalPages) {
+        btnNext.classList.add('disabled', 'cursor-default', 'text-gray-400');
+        btnNext.classList.remove('cursor-pointer')
+    } else {
+        btnNext.classList.add('hover:bg-cyan-600', 'hover:text-white', 'cursor-pointer', 'next');
+        btnNext.addEventListener('click', () => {
+            if (paginaActual < totalPaginas) {
+                page++
+                obtenerPersonajes(page);
+            }
+        });
+    }
+    
+    $pagination.appendChild(btnNext);
+};
+
 
 
 
@@ -114,6 +188,9 @@ window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
     const parallax = document.getElementById('parallax-img');
     parallax.style.transform = `translateY(${scrollY * 0.3}px)`;
-
-    obtenerPersonajes();
 });
+
+window.addEventListener('load', () => {
+    obtenerPersonajes(page); 
+});
+

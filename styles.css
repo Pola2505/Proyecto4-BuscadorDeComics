@@ -10,11 +10,11 @@
 }
 
 /* ------------------------------------------------------- PAGINACION PERSONALIZADA --------------------------------------------------------*/ 
-#btn-prev {
+.prev {
     border-radius: 25px 5px 5px 25px;
 }
 
-#btn-next {
+.next {
     border-radius: 5px 25px 25px 5px;
 }
 
