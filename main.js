@@ -1,4 +1,4 @@
-// Funciones generales
+// -------------------------------------------------------- FUNCIONES GENERALES --------------------------------------------------------
 
 const $ = (elem) => document.querySelector(elem);
 const $$ = (elem) => document.querySelectorAll(elem);
@@ -15,14 +15,14 @@ const ocultarElemento = (selectors) => {
     }
 };
 
-// Atrapando los elementos delm DOM
+// -------------------------------------------------------- ELEMENTOS DEL DOM --------------------------------------------------------
 
 const $containerCharacters = $('#container-characters');
 const $pagination = $('#pagination-list');
 const $selectTipo = $('#tipo');
 const $containerEpisodes = $('#container-episodes');
 
-// Funcion de pintar datos - personajes
+// -------------------------------------------------------- PINTAR PERSONAJES --------------------------------------------------------
 
 const pintarPersonajes = (arrayCharacters) => {
     $containerCharacters.innerHTML = '';
@@ -43,7 +43,7 @@ const pintarPersonajes = (arrayCharacters) => {
     }
 }
 
-// Funcion para pintar los episodios
+// -------------------------------------------------------- PINTAR EPISODIOS --------------------------------------------------------
 
 const pintarEpisodios = (arrayEpisodes) => {
     $containerEpisodes.innerHTML = '';
@@ -61,7 +61,7 @@ const pintarEpisodios = (arrayEpisodes) => {
     }
 }
 
-// Funcion de obtener la informacion sobre los personajes
+// -------------------------------------------------------- OBTENER PERSONAJES --------------------------------------------------------
 
 const obtenerPersonajes = async () => {
     try {
@@ -73,7 +73,7 @@ const obtenerPersonajes = async () => {
     }
 }
 
-// Funcion de obtener episodios
+// -------------------------------------------------------- OBTENER EPISODIOS --------------------------------------------------------
 
 const obtenerEpisodios = async () => {
     try {
@@ -85,7 +85,7 @@ const obtenerEpisodios = async () => {
     }
 }
 
-// Funcion de select - personajes / episodios
+// -------------------------------------------------------- SELECT EPISODIOS / PERSONAJES --------------------------------------------------------
 
 $selectTipo.addEventListener('input', (elem) => {
     if (elem.target.value == 'character') {
@@ -102,6 +102,13 @@ $selectTipo.addEventListener('input', (elem) => {
 
 
 
+
+
+
+
+
+
+// -------------------------------------------------------- WINDOW.ONLOAD --------------------------------------------------------
 
 window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
