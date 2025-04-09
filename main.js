@@ -29,6 +29,7 @@ const $containerEpisodes = $('#container-episodes');
 const $resultsNumber = $('#results-number');
 const $btnBuscar = $('#btn-buscar');
 const $inputBuscar = $('#input-buscar');
+const $loader = $('#loader');
 
 // -------------------------------------------------------- PINTAR PERSONAJES --------------------------------------------------------
 
@@ -73,6 +74,7 @@ const pintarEpisodios = (arrayEpisodes) => {
 
 const obtenerDatos = async (tipo = 'character', pagina = 1, nombre = '') => {
     try {
+        mostrarElemento([$('#loader')]);
         page = pagina;
         const { data } = await axios(`https://rickandmortyapi.com/api/${tipo}/?page=${page}&name=${nombre}`);
         const resultados = data.results;
@@ -89,6 +91,8 @@ const obtenerDatos = async (tipo = 'character', pagina = 1, nombre = '') => {
         actualizarResultados(number);
     } catch (error) {
         console.log(error);
+    } finally {
+        ocultarElemento([$('#loader')]);
     }
 };
 
