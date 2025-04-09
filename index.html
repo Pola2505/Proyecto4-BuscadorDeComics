@@ -55,38 +55,49 @@
             <div id="search-container" class="flex justify-between">
 
                 <div
-                    class="group flex items-center border rounded-lg px-3 py-2 w-full max-w-md focus-within:border-cyan-600 focus-within:shadow-md focus-within:shadow-cyan-800 bg-white">
+                    class="group flex items-center border rounded-lg px-3 py-2 focus-within:border-cyan-600 focus-within:shadow-md focus-within:shadow-cyan-800 bg-white">
                     <i class="bi bi-search-heart text-[20px] text-gray-500 group-focus-within:text-cyan-600"></i>
                     <input id="input-buscar" type="text" placeholder="Ingresa tu búsqueda..."
                         class="flex-1 ml-2 bg-transparent focus:outline-none" />
                 </div>
 
 
-                <div id="search-select-container" class="flex justify-center content-center">
+                <div id="search-select-container" class="flex justify-between items-center">
 
-                    <div id="select-options" class="flex justify-between gap-4">
+                    <div id="select-options" class="flex justify-between gap-1 text-[14px]">
 
                         <div>
                             <label for="tipo" class="text-cyan-600 font-semibold tracking-wide">TIPO</label>
                             <select name="tipo" id="tipo"
-                                class="mx-2 px-3 py-2 rounded-lg border focus:ring-2 focus:ring-cyan-600 focus:border-cyan-600 focus:outline-none">
+                                class="mx-2 px-1 py-1 rounded-lg border focus:ring-2 focus:ring-cyan-600 focus:border-cyan-600 focus:outline-none">
                                 <option value="character">PERSONAJES</option>
                                 <option value="episode">EPISODIOS</option>
                             </select>
                         </div>
 
                         <div>
-                            <label for="filtro" class="text-cyan-600 font-semibold tracking-wide">FILTRO</label>
-                            <select name="filtro" id="filtro"
-                                class="mx-2 px-3 py-2 rounded-lg border focus:ring-2 focus:ring-cyan-600 focus:border-cyan-600 focus:outline-none">
-                                <option value="gender">GENERO</option>
-                                <option value="status">STATUS</option>
+                            <label for="genero" class="text-cyan-600 font-semibold tracking-wide">GENERO</label>
+                            <select name="genero" id="genero"
+                                class="mx-2 px-1 py-1 rounded-lg border focus:ring-2 focus:ring-cyan-600 focus:border-cyan-600 focus:outline-none">
+                                <option value="female">MUJER</option>
+                                <option value="male">HOMBRE</option>
+                                <option value="unknown">DESCONOCIDO</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="status" class="text-cyan-600 font-semibold tracking-wide">STATUS</label>
+                            <select name="status" id="status"
+                                class="mx-2 px-1 py-1 rounded-lg border focus:ring-2 focus:ring-cyan-600 focus:border-cyan-600 focus:outline-none">
+                                <option value="alive">VIVO</option>
+                                <option value="dead">MUERTO</option>
+                                <option value="unknown">DESCONOCIDO</option>
                             </select>
                         </div>
 
                     </div>
 
-                    <button id="btn-buscar" type="button" class="bg-cyan-600 text-white px-2 rounded-lg mx-6">BUSCAR</button>
+                    <button id="btn-buscar" type="button" class="w-[95px] h-[25px] bg-cyan-600 text-white px-2 rounded-lg mx-6">BUSCAR</button>
 
                 </div>
             </div>
