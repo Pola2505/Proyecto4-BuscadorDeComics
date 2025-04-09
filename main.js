@@ -182,6 +182,8 @@ window.addEventListener('scroll', () => {
 });
 
 window.addEventListener('load', () => {
-    obtenerPersonajes(page); 
+    obtenerDatos('character', page); 
+    mostrarElemento([$containerCharacters]);
+    ocultarElemento([$containerEpisodes]);
 });
 
