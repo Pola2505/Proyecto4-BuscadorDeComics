@@ -37,14 +37,57 @@ const pintarPersonajes = (arrayCharacters) => {
     $containerCharacters.innerHTML = '';
 
     for (const character of arrayCharacters) {
+
+        let statusTraducido;
+        switch(character.status) {
+            case 'Alive':
+                statusTraducido = 'Vivo';
+                break;
+            case 'Dead':
+                statusTraducido = 'Muerto';
+                break;
+            case 'unknown':
+                statusTraducido = 'Desconocido';
+                break;
+        }
+
+        let generoTraducido;
+        switch(character.gender) {
+            case 'Female':
+                generoTraducido = 'Mujer';
+                break;
+            case 'Male':
+                generoTraducido = 'Hombre';
+                break;
+            case 'unknown':
+                generoTraducido = 'Desconocido';
+                break;
+        }
+
+        let especieTraducido;
+        switch(character.species) {
+            case 'Human':
+                especieTraducido = 'Humano';
+                break;
+            case 'unknown':
+                especieTraducido = 'Desconocido';
+                break;
+            case 'Alien':
+                especieTraducido = 'Extraterrestre';
+                break;
+            default:
+                especieTraducido = character.species;
+        }
+
+        console.log(character.status);
         $containerCharacters.innerHTML += `
         <a id="link-character" href="https://google.com" class="block w-[30%] mb-5">
           <div class="bg-white border p-4 rounded-2xl shadow-lg hover:shadow-cyan-600 transition duration-300 ease-in-out hover:scale-105">
             <img class="mx-auto rounded-lg mb-4" src="${character.image}" alt="${character.name}" />
             <h2 class="text-xl font-semibold text-gray-800 mb-1">Nombre: <span class="text-cyan-600">${character.name}</span></h2>
-            <h3 class="text-gray-600 mb-1">Status: <span class="font-medium">${character.status}</span></h3>
-            <h3 class="text-gray-600 mb-1">Género: <span class="font-medium">${character.gender}</span></h3>
-            <h3 class="text-gray-600">Especie: <span class="font-medium">${character.species}</span></h3>
+            <h3 class="text-gray-600 mb-1">Status: <span class="font-medium">${statusTraducido}</span></h3>
+            <h3 class="text-gray-600 mb-1">Género: <span class="font-medium">${generoTraducido}</span></h3>
+            <h3 class="text-gray-600">Especie: <span class="font-medium">${especieTraducido}</span></h3>
           </div>
         </a>
       `;
@@ -131,6 +174,7 @@ const renderizarPaginacion = (paginaActual, totalPaginas, tipo, nombre) => {
         obtenerDatos(tipo, paginaActual - 1, nombre);
     });
     $pagination.appendChild(btnPrev);
+    btnPrev.classList.add('prev');
 
     const maxBotones = 5;
     let inicio = Math.max(1, paginaActual - 2);
@@ -154,6 +198,7 @@ const renderizarPaginacion = (paginaActual, totalPaginas, tipo, nombre) => {
         obtenerDatos(tipo, paginaActual + 1, nombre);
     });
     $pagination.appendChild(btnNext);
+    btnNext.classList.add('next');
 };
 
 // Results 
