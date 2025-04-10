@@ -175,7 +175,14 @@ const obtenerDatos = async (tipo = 'character', pagina = 1, nombre = '', status 
             actualizarResultados(0);
 
         } else {
-            console.log('Error grave')
+            $containerEpisodes.innerHTML = `
+                <div class="flex flex-col justify-center items-center w-full">
+                    <p class="text-gray-400 pb-5">Hubo un problema :-(</p>
+                    <img class="rounded-full w-1/2" src="https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F255667fe-dfa8-4665-864a-6422344fc81f_1200x675.jpeg">
+                </div>
+                `;
+                ocultarElemento([$containerCharacters]);
+                mostrarElemento([$containerEpisodes]);
         }
     } finally {
         ocultarElemento([$('#loader')]);
