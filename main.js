@@ -44,6 +44,7 @@ const $filterGender = $('#filter-gender');
 
 const $sectionResults = $('#section-results');
 const $containerDetails = $('#container-details');
+const $containerCharactersEpisodes = $('#container-characters-episodes');
 
 // -------------------------------------------------------- PINTAR PERSONAJES --------------------------------------------------------
 
@@ -118,6 +119,7 @@ const pintarEpisodios = (arrayEpisodes) => {
         <button id="${episode.id}" class="btn-episode block w-[20%] mb-5">
           <div class="flex flex-col justify-center w-full h-[200px] overflow-hidden bg-white border p-4 rounded-2xl shadow-lg hover:shadow-cyan-600 transition duration-300 ease-in-out hover:scale-105">
             <h2 class="text-xl font-semibold text-gray-800 mb-1">Nombre: <span class="text-cyan-600">${episode.name}</span></h2>
+             <h3 class="text-gray-600 mb-1">Episodio: <span class="font-medium">${episode.episode}</span></h3>
             <h3 class="text-gray-600 mb-1">Estreno: <span class="font-medium">${episode.air_date}</span></h3>
           </div>
         </button>
@@ -296,6 +298,24 @@ const mostrarDetallePersonaje = async (id) => {
     try {
         mostrarElemento([$loader]);
         const { data: personaje } = await axios(`https://rickandmortyapi.com/api/character/${id}`);
+        const arrayPromises = personaje.episode.map((elem) => axios(elem));
+
+        const response = await Promise.all(arrayPromises);
+        console.log(response);
+        const arrayDetailCharacter = response.map((elem) => elem.data);
+        console.log(arrayDetailCharacter);
+
+        $containerCharactersEpisodes.innerHTML = '';
+
+        for (const episode of arrayDetailCharacter) {
+            $containerCharactersEpisodes.innerHTML += `
+                <div class="flex flex-col justify-center w-full h-[200px] overflow-hidden bg-white border p-4 rounded-2xl shadow-lg hover:shadow-cyan-600 transition duration-300 ease-in-out hover:scale-105">
+            <h2 class="text-xl font-semibold text-gray-800 mb-1">Nombre: <span class="text-cyan-600">${episode.name}</span></h2>
+             <h3 class="text-gray-600 mb-1">Episodio: <span class="font-medium">${episode.episode}</span></h3>
+            <h3 class="text-gray-600 mb-1">Estreno: <span class="font-medium">${episode.air_date}</span></h3>
+          </div>
+            `
+        }
 
         let statusTraducido = {
             Alive: 'Vivo',
@@ -324,6 +344,7 @@ const mostrarDetallePersonaje = async (id) => {
                 <p class="mb-1">Especie: <span class="font-medium">${especieTraducido}</span></p>
                 <p class="mb-1">Origen: <span class="font-medium">${personaje.origin.name}</span></p>
                 <p class="mb-1">Ubicación: <span class="font-medium">${personaje.location.name}</span></p>
+
                 <button id="btn-volver" class="mt-4 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700">Volver</button>
             </div>
         `;
@@ -337,7 +358,7 @@ const mostrarDetallePersonaje = async (id) => {
             $resultsNumber,
             $containerEpisodes
         ]);
-        mostrarElemento([$containerDetails]);
+        mostrarElemento([$containerDetails, $containerCharactersEpisodes]);
 
 
         $('#btn-volver').addEventListener('click', () => {
@@ -348,7 +369,7 @@ const mostrarDetallePersonaje = async (id) => {
                 $filterGender,
                 $resultsNumber
             ]);
-            ocultarElemento([$containerDetails]);
+            ocultarElemento([$containerDetails, $containerCharactersEpisodes]);
         });
 
     } catch (error) {
@@ -384,10 +405,12 @@ const mostrarDetalleEpisodio = async (id) => {
         const { data: episode } = await axios(`https://rickandmortyapi.com/api/episode/${id}`);
 
         $containerDetails.innerHTML = `
-        <div class="flex flex-col justify-center w-full h-[200px] overflow-hidden bg-white border p-4 rounded-2xl shadow-lg hover:shadow-cyan-600 transition duration-300 ease-in-out hover:scale-105">
+        <div class="flex flex-col justify-center items-center mt-4 w-full min-h-[200px] overflow-hidden bg-white border p-4 rounded-2xl shadow-lg hover:shadow-cyan-600 transition duration-300 ease-in-out hover:scale-105">
 
+            <img src="https://m.media-amazon.com/images/M/MV5BOGEyOTJkNDEtZGZiNi00NWJjLWEyZTEtYTRiYTMxMDA2Mzk3XkEyXkFqcGc@._V1_.jpg" class="w-[250px] h-[180px] mt-10">
             <h2 class="text-xl font-semibold text-gray-800 mb-1">Nombre: <span class="text-cyan-600">${episode.name}</span></h2>
             <h3 class="text-gray-600 mb-1">Estreno: <span class="font-medium">${episode.air_date}</span></h3>
+            <h3 class="text-gray-600 mb-1">Episodio: <span class="font-medium">${episode.episode}</span></h3>
             <button id="btn-volver" class="mt-4 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700">Volver</button>
         </div> `;
 
@@ -409,7 +432,7 @@ const mostrarDetalleEpisodio = async (id) => {
                 $filterGender,
                 $resultsNumber
             ]);
-            ocultarElemento([$containerDetails]);
+            ocultarElemento([$containerDetails, $containerCharactersEpisodes]);
         });
 
 
@@ -419,8 +442,6 @@ const mostrarDetalleEpisodio = async (id) => {
         ocultarElemento([$loader]);
     }
 }
-
-
 
 
 // -------------------------------------------------------- WINDOW.ONLOAD --------------------------------------------------------
