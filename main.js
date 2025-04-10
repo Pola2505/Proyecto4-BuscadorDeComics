@@ -2,6 +2,12 @@
 
 let page = 1;
 let totalPages = 42;
+let estadoActual = {
+    tipo: 'character',
+    nombre: '',
+    status: '',
+    gender: ''
+};
 
 // -------------------------------------------------------- FUNCIONES GENERALES --------------------------------------------------------
 
@@ -34,6 +40,8 @@ const $inputBuscar = $('#input-buscar');
 const $loader = $('#loader');
 const $filterStatus = $('#filter-status');
 const $filterGender = $('#filter-gender');
+const $$btnCharacter = $$('.btn-character');
+const $$btnEpisode = $$('.btn-episode');
 
 // -------------------------------------------------------- PINTAR PERSONAJES --------------------------------------------------------
 
@@ -83,7 +91,7 @@ const pintarPersonajes = (arrayCharacters) => {
                 especieTraducido = character.species;
         }
         $containerCharacters.innerHTML += `
-        <a id="${character.id}" href="https://google.com" class="block w-[30%] mb-5">
+        <button id="${character.id}" class="btn-character block w-[30%] mb-5">
           <div class="bg-white border p-4 rounded-2xl shadow-lg hover:shadow-cyan-600 transition duration-300 ease-in-out hover:scale-105">
             <img class="mx-auto rounded-lg mb-4" src="${character.image}" alt="${character.name}" />
             <h2 class="text-xl font-semibold text-gray-800 mb-1">Nombre: <span class="text-cyan-600">${character.name}</span></h2>
@@ -91,7 +99,7 @@ const pintarPersonajes = (arrayCharacters) => {
             <h3 class="text-gray-600 mb-1">Género: <span class="font-medium">${generoTraducido}</span></h3>
             <h3 class="text-gray-600">Especie: <span class="font-medium">${especieTraducido}</span></h3>
           </div>
-        </a>
+        </button>
       `;
 
     }
@@ -104,12 +112,12 @@ const pintarEpisodios = (arrayEpisodes) => {
 
     for (const episode of arrayEpisodes) {
         $containerEpisodes.innerHTML += `
-        <a id="${episode.id}" href="https://google.com" class="block w-[20%] mb-5">
+        <button id="${episode.id}" class="btn-episode block w-[20%] mb-5">
           <div class="flex flex-col justify-center w-full h-[200px] overflow-hidden bg-white border p-4 rounded-2xl shadow-lg hover:shadow-cyan-600 transition duration-300 ease-in-out hover:scale-105">
             <h2 class="text-xl font-semibold text-gray-800 mb-1">Nombre: <span class="text-cyan-600">${episode.name}</span></h2>
             <h3 class="text-gray-600 mb-1">Estreno: <span class="font-medium">${episode.air_date}</span></h3>
           </div>
-        </a>
+        </button>
         `;
 
     }
@@ -136,7 +144,33 @@ const obtenerDatos = async (tipo = 'character', pagina = 1, nombre = '', status 
         renderizarPaginacion(page, totalPages, tipo, nombre, gender);
         actualizarResultados(number);
     } catch (error) {
-        console.log(error);
+       if( error.response && error.response.status === 404 ) {
+            if( tipo === 'character') {
+                $containerCharacters.innerHTML = `
+                <div class="flex flex-col justify-center items-center w-full">
+                    <p class="text-gray-400 pb-5">No se encontro el personaje :-(</p>
+                    <img class="rounded-full w-1/2" src="https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F255667fe-dfa8-4665-864a-6422344fc81f_1200x675.jpeg">
+                </div>
+                `;
+                ocultarElemento([$containerEpisodes]);
+                mostrarElemento([$containerCharacters]);
+            } else {
+                $containerEpisodes.innerHTML = `
+                <div class="flex flex-col justify-center items-center w-full">
+                    <p class="text-gray-400 pb-5">No se encontro el episodio :-(</p>
+                    <img class="rounded-full w-1/2" src="https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F255667fe-dfa8-4665-864a-6422344fc81f_1200x675.jpeg">
+                </div>
+                `;
+                ocultarElemento([$containerCharacters]);
+                mostrarElemento([$containerEpisodes]);
+            }
+
+            renderizarPaginacion(1, 1, tipo, nombre, gender); 
+            actualizarResultados(0); 
+
+       } else {
+        console.log('Error grave')
+       }
     } finally {
         ocultarElemento([$('#loader')]);
     }
@@ -145,8 +179,20 @@ const obtenerDatos = async (tipo = 'character', pagina = 1, nombre = '', status 
 
 // -------------------------------------------------------- SELECT EPISODIOS / PERSONAJES --------------------------------------------------------
 
+$selectStatus.addEventListener('input', (elem) => {
+    let status = elem.target.value;
+    estadoActual.status = (status === 'todos') ? '' : status;
+});
+
+$selectGenero.addEventListener('input', (elem) => {
+    let gender = elem.target.value;
+    estadoActual.gender = (gender === 'todos') ? '' : gender;
+});
+
 $selectTipo.addEventListener('input', (elem) => {
     const tipo = elem.target.value;
+    estadoActual.tipo = tipo;
+
     if (tipo === 'character') {
         mostrarElemento([$containerCharacters, $filterGender, $filterStatus]);
         ocultarElemento([$containerEpisodes]);
@@ -154,32 +200,8 @@ $selectTipo.addEventListener('input', (elem) => {
         ocultarElemento([$containerCharacters, $filterGender, $filterStatus]);
         mostrarElemento([$containerEpisodes]);
     }
-    obtenerDatos(tipo);
 });
 
-$selectStatus.addEventListener('input', (elem) => {
-    let status = elem.target.value;
-    const tipo = $selectTipo.value;
-    const nombre = $inputBuscar.value.trim();
-    let gender = $selectGenero.value;
-    if( status == 'todos') {
-        status = '';
-    }
-
-    obtenerDatos(tipo, 1, nombre, status, gender);
-});
-
-$selectGenero.addEventListener('input', (elem) => {
-    let gender = elem.target.value;
-    const tipo = $selectTipo.value;
-    const nombre = $inputBuscar.value.trim();
-    let status = $selectStatus.value;
-    if( gender == 'todos') {
-       gender = '';
-    }
-    
-    obtenerDatos(tipo, 1, nombre, status, gender);
-});
 
 
 
@@ -239,21 +261,24 @@ const actualizarResultados = (number) => {
 // Buscar por personaje y episodio
 
 $btnBuscar.addEventListener('click', () => {
-    const nombre = $inputBuscar.value.trim();
-    const tipo = $selectTipo.value;
-    let status = $selectStatus.value;
-    let gender = $selectGenero.value;
+    estadoActual.nombre = $inputBuscar.value.trim();
 
-    if( status == 'todos' ) {
-        status = '';
-    }
+    
+    const statusSeleccionado = $selectStatus.value;
+    const genderSeleccionado = $selectGenero.value;
 
-    if( gender == 'todos') {
-        gender = '';
-    }
+    estadoActual.status = (statusSeleccionado === 'todos') ? '' : statusSeleccionado;
+    estadoActual.gender = (genderSeleccionado === 'todos') ? '' : genderSeleccionado;
 
-    obtenerDatos(tipo, 1, nombre, status, gender);
+    obtenerDatos(
+        estadoActual.tipo,
+        1,
+        estadoActual.nombre,
+        estadoActual.status,
+        estadoActual.gender
+    );
 });
+
 
 
 
