@@ -40,8 +40,10 @@ const $inputBuscar = $('#input-buscar');
 const $loader = $('#loader');
 const $filterStatus = $('#filter-status');
 const $filterGender = $('#filter-gender');
-const $$btnCharacter = $$('.btn-character');
-const $$btnEpisode = $$('.btn-episode');
+
+
+const $sectionResults = $('#section-results');
+const $containerDetails = $('#container-details');
 
 // -------------------------------------------------------- PINTAR PERSONAJES --------------------------------------------------------
 
@@ -51,7 +53,7 @@ const pintarPersonajes = (arrayCharacters) => {
     for (const character of arrayCharacters) {
 
         let statusTraducido;
-        switch(character.status) {
+        switch (character.status) {
             case 'Alive':
                 statusTraducido = 'Vivo';
                 break;
@@ -64,7 +66,7 @@ const pintarPersonajes = (arrayCharacters) => {
         }
 
         let generoTraducido;
-        switch(character.gender) {
+        switch (character.gender) {
             case 'Female':
                 generoTraducido = 'Mujer';
                 break;
@@ -77,7 +79,7 @@ const pintarPersonajes = (arrayCharacters) => {
         }
 
         let especieTraducido;
-        switch(character.species) {
+        switch (character.species) {
             case 'Human':
                 especieTraducido = 'Humano';
                 break;
@@ -103,6 +105,7 @@ const pintarPersonajes = (arrayCharacters) => {
       `;
 
     }
+    detallesPersonaje();
 }
 
 // -------------------------------------------------------- PINTAR EPISODIOS --------------------------------------------------------
@@ -121,6 +124,8 @@ const pintarEpisodios = (arrayEpisodes) => {
         `;
 
     }
+
+    detallesEpisodio();
 }
 
 // -------------------------------------------------------- OBTENER DATA --------------------------------------------------------
@@ -133,7 +138,7 @@ const obtenerDatos = async (tipo = 'character', pagina = 1, nombre = '', status 
         const resultados = data.results;
         let totalPages = data.info.pages;
         let number = data.info.count;
-       
+
 
         if (tipo === 'character') {
             pintarPersonajes(resultados);
@@ -144,8 +149,8 @@ const obtenerDatos = async (tipo = 'character', pagina = 1, nombre = '', status 
         renderizarPaginacion(page, totalPages, tipo, nombre, gender);
         actualizarResultados(number);
     } catch (error) {
-       if( error.response && error.response.status === 404 ) {
-            if( tipo === 'character') {
+        if (error.response && error.response.status === 404) {
+            if (tipo === 'character') {
                 $containerCharacters.innerHTML = `
                 <div class="flex flex-col justify-center items-center w-full">
                     <p class="text-gray-400 pb-5">No se encontro el personaje :-(</p>
@@ -165,12 +170,12 @@ const obtenerDatos = async (tipo = 'character', pagina = 1, nombre = '', status 
                 mostrarElemento([$containerEpisodes]);
             }
 
-            renderizarPaginacion(1, 1, tipo, nombre, gender); 
-            actualizarResultados(0); 
+            renderizarPaginacion(1, 1, tipo, nombre, gender);
+            actualizarResultados(0);
 
-       } else {
-        console.log('Error grave')
-       }
+        } else {
+            console.log('Error grave')
+        }
     } finally {
         ocultarElemento([$('#loader')]);
     }
@@ -196,9 +201,11 @@ $selectTipo.addEventListener('input', (elem) => {
     if (tipo === 'character') {
         mostrarElemento([$containerCharacters, $filterGender, $filterStatus]);
         ocultarElemento([$containerEpisodes]);
+        $sectionResults.scrollIntoView({ behavior: 'smooth' });
     } else if (tipo === 'episode') {
         ocultarElemento([$containerCharacters, $filterGender, $filterStatus]);
         mostrarElemento([$containerEpisodes]);
+        $sectionResults.scrollIntoView({ behavior: 'smooth' });
     }
 });
 
@@ -207,7 +214,7 @@ $selectTipo.addEventListener('input', (elem) => {
 
 // -------------------------------------------------------- PAGINACION CAMBIO DE PAGINA -------------------------------------------------------- 
 
-const renderizarPaginacion = (paginaActual, totalPaginas, tipo, nombre, status = '', gender ='') => {
+const renderizarPaginacion = (paginaActual, totalPaginas, tipo, nombre, status = '', gender = '') => {
     $pagination.innerHTML = '';
 
     const crearBoton = (texto, habilitado, onClick) => {
@@ -263,7 +270,7 @@ const actualizarResultados = (number) => {
 $btnBuscar.addEventListener('click', () => {
     estadoActual.nombre = $inputBuscar.value.trim();
 
-    
+
     const statusSeleccionado = $selectStatus.value;
     const genderSeleccionado = $selectGenero.value;
 
@@ -279,10 +286,139 @@ $btnBuscar.addEventListener('click', () => {
     );
 });
 
+// Mostrar los detalles del personaje
+
+// 1 atrapar los botones array
+// 2 recorrer los botones con un foreach
+// 3 agregar un evento click al boton
+
+const mostrarDetallePersonaje = async (id) => {
+    try {
+        mostrarElemento([$loader]);
+        const { data: personaje } = await axios(`https://rickandmortyapi.com/api/character/${id}`);
+
+        let statusTraducido = {
+            Alive: 'Vivo',
+            Dead: 'Muerto',
+            unknown: 'Desconocido'
+        }[personaje.status];
+
+        let generoTraducido = {
+            Female: 'Mujer',
+            Male: 'Hombre',
+            unknown: 'Desconocido'
+        }[personaje.gender];
+
+        let especieTraducido = {
+            Human: 'Humano',
+            Alien: 'Extraterrestre',
+            unknown: 'Desconocido'
+        }[personaje.species] || personaje.species;
+
+        $containerDetails.innerHTML = `
+            <div class="bg-white border p-6 rounded-2xl shadow-xl text-center max-w-xl mx-auto">
+                <img class="rounded-lg mx-auto mb-4" src="${personaje.image}" alt="${personaje.name}" />
+                <h2 class="text-2xl font-bold mb-2">${personaje.name}</h2>
+                <p class="mb-1">Status: <span class="font-medium">${statusTraducido}</span></p>
+                <p class="mb-1">Género: <span class="font-medium">${generoTraducido}</span></p>
+                <p class="mb-1">Especie: <span class="font-medium">${especieTraducido}</span></p>
+                <p class="mb-1">Origen: <span class="font-medium">${personaje.origin.name}</span></p>
+                <p class="mb-1">Ubicación: <span class="font-medium">${personaje.location.name}</span></p>
+                <button id="btn-volver" class="mt-4 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700">Volver</button>
+            </div>
+        `;
 
 
+        ocultarElemento([
+            $containerCharacters,
+            $pagination,
+            $filterStatus,
+            $filterGender,
+            $resultsNumber,
+            $containerEpisodes
+        ]);
+        mostrarElemento([$containerDetails]);
 
 
+        $('#btn-volver').addEventListener('click', () => {
+            mostrarElemento([
+                $containerCharacters,
+                $pagination,
+                $filterStatus,
+                $filterGender,
+                $resultsNumber
+            ]);
+            ocultarElemento([$containerDetails]);
+        });
+
+    } catch (error) {
+        console.log('Error al mostrar detalle del personaje', error);
+    } finally {
+        ocultarElemento([$loader]);
+    }
+};
+
+const detallesPersonaje = () => {
+    const $$btnCharacter = $$('.btn-character');
+    $$btnCharacter.forEach((boton) => {
+        boton.addEventListener('click', (e) => {
+            const idCharacter = e.currentTarget.id;
+            mostrarDetallePersonaje(idCharacter);
+        });
+    });
+};
+
+const detallesEpisodio = () => {
+    const $$btnEpisode = $$('.btn-episode');
+    $$btnEpisode.forEach((boton) => {
+        boton.addEventListener('click', (e) => {
+            const idEpisode = e.currentTarget.id;
+            mostrarDetalleEpisodio(idEpisode);
+        })
+    })
+}
+
+const mostrarDetalleEpisodio = async (id) => {
+    try {
+        mostrarElemento([$loader]);
+        const { data: episode } = await axios(`https://rickandmortyapi.com/api/episode/${id}`);
+
+        $containerDetails.innerHTML = `
+        <div class="flex flex-col justify-center w-full h-[200px] overflow-hidden bg-white border p-4 rounded-2xl shadow-lg hover:shadow-cyan-600 transition duration-300 ease-in-out hover:scale-105">
+
+            <h2 class="text-xl font-semibold text-gray-800 mb-1">Nombre: <span class="text-cyan-600">${episode.name}</span></h2>
+            <h3 class="text-gray-600 mb-1">Estreno: <span class="font-medium">${episode.air_date}</span></h3>
+            <button id="btn-volver" class="mt-4 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700">Volver</button>
+        </div> `;
+
+        ocultarElemento([
+            $containerCharacters,
+            $pagination,
+            $filterStatus,
+            $filterGender,
+            $resultsNumber,
+            $containerEpisodes
+        ]);
+        mostrarElemento([$containerDetails]);
+
+        $('#btn-volver').addEventListener('click', () => {
+            mostrarElemento([
+                $containerEpisodes,
+                $pagination,
+                $filterStatus,
+                $filterGender,
+                $resultsNumber
+            ]);
+            ocultarElemento([$containerDetails]);
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    } finally {
+        ocultarElemento([$loader]);
+    }
+}
 
 
 
@@ -296,8 +432,8 @@ window.addEventListener('scroll', () => {
 });
 
 window.addEventListener('load', () => {
-    obtenerDatos('character', page); 
-    mostrarElemento([$containerCharacters]);
+    obtenerDatos('character', page);
+    mostrarElemento([$containerCharacters]); // ocultando por ahora para crear el modal
     ocultarElemento([$containerEpisodes]);
 });
 
