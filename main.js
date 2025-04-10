@@ -1,7 +1,6 @@
 // -------------------------------------------------------- VARIABLES --------------------------------------------------------
 
 let page = 1;
-let totalPages = 42;
 let estadoActual = {
     tipo: 'character',
     nombre: '',
@@ -288,11 +287,6 @@ $btnBuscar.addEventListener('click', () => {
     );
 });
 
-// Mostrar los detalles del personaje
-
-// 1 atrapar los botones array
-// 2 recorrer los botones con un foreach
-// 3 agregar un evento click al boton
 
 const mostrarDetallePersonaje = async (id) => {
     try {
@@ -301,21 +295,26 @@ const mostrarDetallePersonaje = async (id) => {
         const arrayPromises = personaje.episode.map((elem) => axios(elem));
 
         const response = await Promise.all(arrayPromises);
-        console.log(response);
+
         const arrayDetailCharacter = response.map((elem) => elem.data);
-        console.log(arrayDetailCharacter);
+
 
         $containerCharactersEpisodes.innerHTML = '';
 
         for (const episode of arrayDetailCharacter) {
             $containerCharactersEpisodes.innerHTML += `
+            <button id="${episode.id}" class="btn-episode-inside block w-[20%] mb-5">
                 <div class="flex flex-col justify-center w-full h-[200px] overflow-hidden bg-white border p-4 rounded-2xl shadow-lg hover:shadow-cyan-600 transition duration-300 ease-in-out hover:scale-105">
             <h2 class="text-xl font-semibold text-gray-800 mb-1">Nombre: <span class="text-cyan-600">${episode.name}</span></h2>
              <h3 class="text-gray-600 mb-1">Episodio: <span class="font-medium">${episode.episode}</span></h3>
             <h3 class="text-gray-600 mb-1">Estreno: <span class="font-medium">${episode.air_date}</span></h3>
           </div>
+          </button>
+          
             `
         }
+
+        activarClickEnItemsInternos()
 
         let statusTraducido = {
             Alive: 'Vivo',
@@ -358,7 +357,8 @@ const mostrarDetallePersonaje = async (id) => {
             $resultsNumber,
             $containerEpisodes
         ]);
-        mostrarElemento([$containerDetails, $containerCharactersEpisodes]);
+        mostrarElemento([$containerCharactersEpisodes, $containerDetails]);
+        $sectionResults.scrollIntoView({ behavior: 'smooth' });
 
 
         $('#btn-volver').addEventListener('click', () => {
@@ -369,7 +369,15 @@ const mostrarDetallePersonaje = async (id) => {
                 $filterGender,
                 $resultsNumber
             ]);
-            ocultarElemento([$containerDetails, $containerCharactersEpisodes]);
+            ocultarElemento([$containerCharactersEpisodes, $containerDetails]);
+
+            obtenerDatos(
+                estadoActual.tipo,
+                page,
+                estadoActual.nombre,
+                estadoActual.status,
+                estadoActual.gender
+            );
         });
 
     } catch (error) {
@@ -403,6 +411,27 @@ const mostrarDetalleEpisodio = async (id) => {
     try {
         mostrarElemento([$loader]);
         const { data: episode } = await axios(`https://rickandmortyapi.com/api/episode/${id}`);
+        const arrayPromises = episode.characters.map((elem) => axios(elem));
+
+        const response = await Promise.all(arrayPromises);
+
+        const arrayDetailEpisode = response.map((elem) => elem.data);
+
+        $containerCharactersEpisodes.innerHTML = '';
+
+        for (const character of arrayDetailEpisode) {
+            $containerCharactersEpisodes.innerHTML += `
+            <button id="${character.id}" class="btn-character-inside block w-[30%] mb-5">
+        <div class="bg-white border p-6 rounded-2xl shadow-xl text-center w-[250px]">
+            <img class="rounded-lg mx-auto mb-4" src="${character.image}" alt="${character.name}" />
+            <h2 class="text-xl font-bold mb-2">${character.name}</h2>
+        </div>
+        </button>
+    `;
+        }
+
+        activarClickEnItemsInternos()
+
 
         $containerDetails.innerHTML = `
         <div class="flex flex-col justify-center items-center mt-4 w-full min-h-[200px] overflow-hidden bg-white border p-4 rounded-2xl shadow-lg hover:shadow-cyan-600 transition duration-300 ease-in-out hover:scale-105">
@@ -422,7 +451,8 @@ const mostrarDetalleEpisodio = async (id) => {
             $resultsNumber,
             $containerEpisodes
         ]);
-        mostrarElemento([$containerDetails]);
+        mostrarElemento([$containerDetails, $containerCharactersEpisodes]);
+        $sectionResults.scrollIntoView({ behavior: 'smooth' });
 
         $('#btn-volver').addEventListener('click', () => {
             mostrarElemento([
@@ -433,6 +463,14 @@ const mostrarDetalleEpisodio = async (id) => {
                 $resultsNumber
             ]);
             ocultarElemento([$containerDetails, $containerCharactersEpisodes]);
+
+            obtenerDatos(
+                estadoActual.tipo,
+                page,
+                estadoActual.nombre,
+                estadoActual.status,
+                estadoActual.gender
+            );
         });
 
 
@@ -442,6 +480,26 @@ const mostrarDetalleEpisodio = async (id) => {
         ocultarElemento([$loader]);
     }
 }
+
+const activarClickEnItemsInternos = () => {
+    // Episodios dentro de un personaje
+    const $$episodiosInternos = $$('.btn-episode-inside');
+    $$episodiosInternos.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.id;
+            mostrarDetalleEpisodio(id);
+        });
+    });
+
+    // Personajes dentro de un episodio
+    const $$personajesInternos = $$('.btn-character-inside');
+    $$personajesInternos.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.id;
+            mostrarDetallePersonaje(id);
+        });
+    });
+};
 
 
 // -------------------------------------------------------- WINDOW.ONLOAD --------------------------------------------------------
