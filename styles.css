@@ -9,6 +9,11 @@
     border-radius: 10px;
 }
 
+#parallax-img {
+    transform: translateY(0); 
+    transition: transform 0.1s;
+}
+
 /* ------------------------------------------------------- PAGINACION PERSONALIZADA --------------------------------------------------------*/ 
 .prev {
     border-radius: 25px 5px 5px 25px;
