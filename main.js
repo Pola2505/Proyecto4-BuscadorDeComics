@@ -115,7 +115,7 @@ const pintarEpisodios = (arrayEpisodes) => {
 
     for (const episode of arrayEpisodes) {
         $containerEpisodes.innerHTML += `
-        <button id="${episode.id}" class="btn-episode block w-[20%] mb-5">
+        <button id="${episode.id}" class="btn-episode block w-full md:w-[40%] lg:w-[25%] mb-5">
           <div class="flex flex-col justify-center w-full h-[200px] overflow-hidden bg-white border p-4 rounded-2xl shadow-lg hover:shadow-cyan-600 transition duration-300 ease-in-out hover:scale-105">
             <h2 class="text-xl font-semibold text-gray-800 mb-1">Nombre: <span class="text-cyan-600">${episode.name}</span></h2>
              <h3 class="text-gray-600 mb-1">Episodio: <span class="font-medium">${episode.episode}</span></h3>
