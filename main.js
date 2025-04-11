@@ -93,7 +93,7 @@ const pintarPersonajes = (arrayCharacters) => {
                 especieTraducido = character.species;
         }
         $containerCharacters.innerHTML += `
-        <button id="${character.id}" class="btn-character block w-[30%] mb-5">
+        <button id="${character.id}" class="btn-character block w-full md:w-[40%] lg:w-[30%] mb-5">
           <div class="bg-white border p-4 rounded-2xl shadow-lg hover:shadow-cyan-600 transition duration-300 ease-in-out hover:scale-105">
             <img class="mx-auto rounded-lg mb-4" src="${character.image}" alt="${character.name}" />
             <h2 class="text-xl font-semibold text-gray-800 mb-1">Nombre: <span class="text-cyan-600">${character.name}</span></h2>
@@ -251,7 +251,7 @@ const renderizarPaginacion = (paginaActual, totalPaginas, tipo, nombre, status =
 
     for (let i = inicio; i <= fin; i++) {
         const btnPage = document.createElement('li');
-        btnPage.className = `number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold mx-1 ${paginaActual === i ? 'bg-cyan-600 text-white rounded-full' : 'hover:bg-cyan-600 hover:text-white hover:rounded-full'}`;
+        btnPage.className = `number list-none leading-[45px] text-center h-[45px] w-[45px] text-[18px] cursor-pointer font-semibold mx-1 ${paginaActual === i ? 'bg-cyan-600 text-white rounded-full' : 'hover:bg-cyan-600 hover:text-white hover:rounded-full'} hidden md:inline`;
         btnPage.innerHTML = `<span>${i}</span>`;
         btnPage.addEventListener('click', () => {
             obtenerDatos(tipo, i, nombre, status, gender);
