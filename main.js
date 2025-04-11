@@ -10,8 +10,13 @@ let estadoActual = {
 
 // -------------------------------------------------------- FUNCIONES GENERALES --------------------------------------------------------
 
+// Funcion de buscar elementos del DOM
+
 const $ = (elem) => document.querySelector(elem);
+
 const $$ = (elem) => document.querySelectorAll(elem);
+
+// Funcion de ocultar y mostrar las vistas
 
 const mostrarElemento = (selectors) => {
     for (const selector of selectors) {
@@ -39,13 +44,13 @@ const $inputBuscar = $('#input-buscar');
 const $loader = $('#loader');
 const $filterStatus = $('#filter-status');
 const $filterGender = $('#filter-gender');
-
-
 const $sectionResults = $('#section-results');
 const $containerDetails = $('#container-details');
 const $containerCharactersEpisodes = $('#container-characters-episodes');
 
 // -------------------------------------------------------- PINTAR PERSONAJES --------------------------------------------------------
+
+// Funcion de pintar los personajes, traducimos tambien los status, genero y especie + llamamos la funcion de mostrar los detalles
 
 const pintarPersonajes = (arrayCharacters) => {
     $containerCharacters.innerHTML = '';
@@ -110,6 +115,8 @@ const pintarPersonajes = (arrayCharacters) => {
 
 // -------------------------------------------------------- PINTAR EPISODIOS --------------------------------------------------------
 
+// Funcion de pintar los episodios. Pintamos los episodios y incluimos la funcion de mostrar los detalles del episodio
+
 const pintarEpisodios = (arrayEpisodes) => {
     $containerEpisodes.innerHTML = '';
 
@@ -130,6 +137,8 @@ const pintarEpisodios = (arrayEpisodes) => {
 }
 
 // -------------------------------------------------------- OBTENER DATA --------------------------------------------------------
+
+// Funcion de obtener data con varios filtros y con condicion para identificar si pintamos los episodios o personajes. Gracias a todos los filtros tambien podemos actualizar los filtros, cantidad de paginas y resultados + manejo de errores de la API y de cuando no se encuentra el personaje 
 
 const obtenerDatos = async (tipo = 'character', pagina = 1, nombre = '', status = '', gender = '') => {
     try {
@@ -190,7 +199,9 @@ const obtenerDatos = async (tipo = 'character', pagina = 1, nombre = '', status 
 };
 
 
-// -------------------------------------------------------- SELECT EPISODIOS / PERSONAJES --------------------------------------------------------
+// -------------------------------------------------------- SELECT EPISODIOS / PERSONAJES ----------------------------------------------------
+
+// Funcion de cambiar el status/ genero y tipo en la busqueda, si el value es todos manda un string vacio para no filtrar
 
 $selectStatus.addEventListener('input', (elem) => {
     let status = elem.target.value;
@@ -201,6 +212,8 @@ $selectGenero.addEventListener('input', (elem) => {
     let gender = elem.target.value;
     estadoActual.gender = (gender === 'todos') ? '' : gender;
 });
+
+// Si el usuario elige episodios los filtros desaparecen hasta se cambie a personajes
 
 $selectTipo.addEventListener('input', (elem) => {
     const tipo = elem.target.value;
@@ -220,7 +233,9 @@ $selectTipo.addEventListener('input', (elem) => {
 
 
 
-// -------------------------------------------------------- PAGINACION CAMBIO DE PAGINA -------------------------------------------------------- 
+// ------------------------------------------------------ PAGINACION CAMBIO DE PAGINA ----------------------------------------------------- 
+
+// Funcion de crear y hacer funcionar la paginacion, tiene en cuenta la cantidad de paginas dependiendo de los filtros aplicados y la cantidad de resultados. Al estar en la pagina 1 el boton volver se deshabilita tal cual como el siguiente en la ultima pagina. La cantidad maxima de los numeros que se muestran son 5.
 
 const renderizarPaginacion = (paginaActual, totalPaginas, tipo, nombre, status = '', gender = '') => {
     $pagination.innerHTML = '';
@@ -266,14 +281,14 @@ const renderizarPaginacion = (paginaActual, totalPaginas, tipo, nombre, status =
     btnNext.classList.add('next');
 };
 
-// Results 
+// ------------------------------------------------------ CANTIDAD DE RESULTADOS  ----------------------------------------------------- 
 
 const actualizarResultados = (number) => {
     $resultsNumber.innerHTML = '';
     $resultsNumber.innerHTML += `${number}`;
 }
 
-// Buscar por personaje y episodio
+// ------------------------------------------------------ BOTON DE BUSQUEDA ----------------------------------------------------- 
 
 $btnBuscar.addEventListener('click', () => {
     estadoActual.nombre = $inputBuscar.value.trim();
@@ -293,6 +308,8 @@ $btnBuscar.addEventListener('click', () => {
         estadoActual.gender
     );
 });
+
+// ------------------------------------------------------ MOSTRAR DETALLE PERSONAJE ----------------------------------------------------- 
 
 
 const mostrarDetallePersonaje = async (id) => {
@@ -388,8 +405,25 @@ const mostrarDetallePersonaje = async (id) => {
         });
 
     } catch (error) {
-        console.log('Error al mostrar detalle del personaje', error);
-    } finally {
+        $containerDetails.innerHTML = `
+            <div class="flex flex-col justify-center items-center w-full">
+                <p class="text-gray-400 pb-5">No se pudo mostrar el detalle del personaje :-(</p>
+                <img class="rounded-full w-1/2" src="https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F255667fe-dfa8-4665-864a-6422344fc81f_1200x675.jpeg">
+            </div>
+        `;
+        ocultarElemento([
+            $containerCharacters,
+            $pagination,
+            $filterStatus,
+            $filterGender,
+            $resultsNumber,
+            $containerEpisodes,
+            $containerCharactersEpisodes
+        ]);
+        mostrarElemento([$containerDetails]);
+        $sectionResults.scrollIntoView({ behavior: 'smooth' });
+    }
+     finally {
         ocultarElemento([$loader]);
     }
 };
@@ -404,6 +438,10 @@ const detallesPersonaje = () => {
     });
 };
 
+// ------------------------------------------------------ MOSTRAR DETALLE EPISODIO ----------------------------------------------------- 
+
+// Primero identificamos cual es el episodio clickeado y le pasamo la funcion de mostrar la info
+
 const detallesEpisodio = () => {
     const $$btnEpisode = $$('.btn-episode');
     $$btnEpisode.forEach((boton) => {
@@ -413,6 +451,8 @@ const detallesEpisodio = () => {
         })
     })
 }
+
+// obtenemos la data de nuevo, como al hacer la consulta recibimos muchos strings de links de los personajes tenemos que usar el Promise.All para recorrer un array de personajes. estamos insertando la informacion en dos conetenedores separados por si alguna de las dos se tarda mas.
 
 const mostrarDetalleEpisodio = async (id) => {
     try {
@@ -482,11 +522,24 @@ const mostrarDetalleEpisodio = async (id) => {
 
 
     } catch (error) {
-        console.log(error);
-    } finally {
+        $containerCharacters.innerHTML = `
+            <div class="flex flex-col justify-center items-center w-full">
+                <p class="text-gray-400 pb-5">No se pudo mostrar el detalle del episodio :-(</p>
+                <img class="rounded-full w-1/2" src="https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F255667fe-dfa8-4665-864a-6422344fc81f_1200x675.jpeg">
+            </div>
+        `;
+        ocultarElemento([$containerEpisodes]);
+        mostrarElemento([$containerCharacters]);
+        $sectionResults.scrollIntoView({ behavior: 'smooth' }); 
+    }
+        finally {
         ocultarElemento([$loader]);
     }
 }
+
+// ------------------------------------------------------ DETALLES CON LINKS A PERSONAJES  -------------------------------------------------- 
+
+// Funciones para poder a acceder a la informacion del episodio dentro de los detalles de los personajes y al revez. Le tuve que poner clases nuevas porque poniendole clases de los botones anteriores no funcionaba ya que la funcion para los detalles empieza a crear los detalles despues
 
 const activarClickEnItemsInternos = () => {
     // Episodios dentro de un personaje
@@ -519,7 +572,7 @@ window.addEventListener('scroll', () => {
 
 window.addEventListener('load', () => {
     obtenerDatos('character', page);
-    mostrarElemento([$containerCharacters]); // ocultando por ahora para crear el modal
+    mostrarElemento([$containerCharacters]); 
     ocultarElemento([$containerEpisodes]);
 });
 
